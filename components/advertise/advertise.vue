@@ -129,6 +129,7 @@
             }
         },
         created: function(){
+            return this.$emit("error"); // 未开流量主
             if(!this.adSelect) this.$emit("error");
         },
         computed: {

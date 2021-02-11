@@ -27,7 +27,7 @@ function disposeApp($app){
     $app.$scope.throttle = new throttleGenerater();
     $app.data.curWeek = getCurWeek($app.data.curTermStart);
     $app.$scope.onload = (funct, ...args) => {
-        if($app.data.openid) funct(...args);
+        if(store.state.openid) funct(...args);
         else $app.$scope.eventBus.once("LoginEvent", funct);
     }
 }
@@ -76,10 +76,11 @@ function initAppData(){
             if(custom.color_list) store.commit("setColorList", {colorList: JSON.parse(custom.color_list)});
         }
 
-        /* 用户使用信息 OPENID  1 已注册用户  2 未注册用户*/
-        store.commit("setUserStatus", response);
+        /* OPENID 用户使用信息 1 已注册用户  2 未注册用户*/
         console.log("SetOpenid:", response.openid);
         console.log("Status:", response.status === 1 ? "User Login" : "New user");
+        store.commit("setUserStatus", response);
+        response.status === 3 && response.msg && toast(response.msg, 500).then(() => methods.nav("/pages/home/login/login"));
 
         /* dot */
         const notify = response.initData.tips;

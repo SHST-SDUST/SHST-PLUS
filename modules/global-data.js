@@ -9,7 +9,7 @@ var data = {
     openid: "",
     point : "",
     curWeek: 1,
-    userFlag: 0, // 0 未登录 1 已登陆
+    user: 0, // 0 未登录 1 已登陆
     initData: {},
     version: "1.0.0",
     curTerm: "2019-2020-1",

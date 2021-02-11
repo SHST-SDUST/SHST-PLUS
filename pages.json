@@ -1,16 +1,26 @@
 {
     "pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
         {
-            "path": "pages/index/index"
+            "path": "pages/home/tips/tips",
+            "style": {}
         },{
             "path": "pages/system/not-found"
         },{
             "path": "pages/system/webview"
+        },{
+            "path": "pages/home/funct/funct",
+            "style": {}
+        },{
+            "path": "pages/home/user/user",
+            "style": {}
+        },{
+            "path": "pages/home/login/login",
+            "style": {}
         }
     ],
     "globalStyle": {
         "navigationBarTextStyle": "black",
-        "navigationBarTitleText": "CLI",
+        "navigationBarTitleText": "山科小站",
         "navigationBarBackgroundColor": "#F1F1F1",
         "backgroundColor": "#F8F8F8"
     },
@@ -21,19 +31,19 @@
         "list": [{
                 "iconPath": "/static/img/index.png",
                 "selectedIconPath": "/static/img/index-active.png",
-                "pagePath": "pages/index/index",
+                "pagePath": "pages/home/tips/tips",
                 "text": "首页"
             },
             {
                 "iconPath": "/static/img/fun.png",
                 "selectedIconPath": "/static/img/fun-active.png",
-                "pagePath": "pages/index/index",
+                "pagePath": "pages/home/funct/funct",
                 "text": "功能"
             },
             {
                 "iconPath": "/static/img/user.png",
                 "selectedIconPath": "/static/img/user-active.png",
-                "pagePath": "pages/index/index",
+                "pagePath": "pages/home/user/user",
                 "text": "用户"
             }
         ]
