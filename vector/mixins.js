@@ -1,5 +1,5 @@
 const filters = {
-
+    tagFilter: str => String(str).replace(/<[\/]?[\s\S]*?>/g, ""),
 }
 
 const methods = {

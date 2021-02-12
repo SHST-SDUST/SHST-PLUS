@@ -4,10 +4,34 @@ import {formatDate, dayDiff, safeDate} from "@/modules/datetime";
 /**
  * 统一处理课表功能
  */
-function tableDispose(info, today = false) {
+const tableDispose = (info, today = false, week = null) => {
     const tables = [];
-    const curWeek = store.state.curWeek;
+    const curWeek = week || store.state.curWeek;
     const curDay = safeDate().getDay() || 7;
+    const judgeCurWeekTable = (weeks, curWeek) => {
+        const decideCurWeek = (str) => {
+            let [start, end] = str.split("-");
+            start = start >> 0;
+            end = end >> 0;
+            for(let i=start; i<=end; ++i){
+                if(curWeek === i) return true;
+            }
+            return false;
+        }
+        for(let i=0, n=weeks.length; i<n; ++i){
+            const str = weeks[i];
+            if(/^\d+-\d+$/.test(str)){
+                if(decideCurWeek(str)) return true;
+            }else if(/^\d+-\d+\/[12]$/.test(str)){
+                const type = str.slice(-1);
+                if((type & 1) !== (curWeek & 1)) continue;
+                if(decideCurWeek(str.replace(/\/\d/, ""))) return true;
+            }else if(/^\d+$/.test(str)){
+                if(str >> 0 === curWeek) return true;
+            }
+        }
+        return false;
+    }
     info.forEach(value => {
         if(!value) return void 0;
         const unit = Object.create(null);
@@ -17,48 +41,31 @@ function tableDispose(info, today = false) {
         unit.day = day;
         unit.serial = serial;
         unit.name = value.name;
+        unit.weeks = value.weeks;
+        unit.background = "#CCC";
         unit.teacher = value.teacher;
         unit.weeks_raw = value.weeks_raw;
         unit.classroom = value.classroom;
-        unit.cur_week = false;
-        unit.background = "#AAA";
-        const decideCurWeek = (str) => {
-            const [start, end] = str.split("-");
-            for(let i=start; i<=end; ++i){
-                if(curWeek === i) return unit.cur_week = true;
-            }
-            return false;
-        }
-        value.weeks.forEach(str => {
-            if(unit.cur_week) return void 0;
-            if(/\d+-\d+/.test(str)){
-                if(decideCurWeek(str)) return void 0;
-            }else if(/\d+-\d+\/[12]/.test(str)){
-                const type = str.slice(-1);
-                if(type & 1 !== curWeek & 1) return void 0;
-                if(decideCurWeek(str.replace(/\/\d/, ""))) return void 0;
-            }else if(/\d+/.test(str)){
-                if(str >> 0 === curWeek) unit.cur_week = true;
-            }
-        })
+        unit.cur_week = judgeCurWeekTable(value.weeks, curWeek);
         if(unit.cur_week){
             const uniqueNum = Array.prototype.reduce.call(value.name, (pre, cur) => pre+cur.charCodeAt(), 0);
             unit.background = store.state.colorList[uniqueNum % store.state.colorN];
         }
         if(!tables[day]) tables[day] = [];
-        if(!tables[day][serial]) tables[day][serial] = [];
-        tables[day][serial].push(unit);
+        if(!tables[day][serial]) tables[day][serial] = {background: "#CCC", table: []};
+        if(unit.cur_week) tables[day][serial].background = unit.background;
+        tables[day][serial].table.push(unit);
     })
-    console.log(tables);
     if(today) return tables[curDay];
     else return tables;
 }
+
 
 /**
  * @param {string} startTime
  * @description 获取当前周次
  */
-function getCurWeek(startTime) {
+const getCurWeek = (startTime) => {
     console.log(formatDate());
     if(formatDate() < startTime) return 1;
     return (dayDiff(startTime, formatDate()) / 7) >> 0 + 1;

@@ -43,16 +43,16 @@
         </layout>
 
         <layout title="今日课程" >
-            <view v-for="(item,index) in table" :key="index">
-                <view class="unit-table" v-if="item" v-for="(classObj,classIndex) in item.table" :key="classIndex">
+            <view v-for="(item, index) in tables" :key="index">
+                <view class="unit-table" v-for="(classes, classIndex) in item.table" v-if="item && clesses.cur_week" :key="classIndex">
                     <view class="y-center a-mr a-mt">
-                        <view class="a-dot" :style="{'background':classObj.background}"></view>
-                        <view class="a-lmr">第{{2*(classObj.knot + 1) - 1}}{{2*(classObj.knot + 1)}}节</view>
-                        <view>{{classObj.teacher}}</view>
+                        <view class="a-dot" :style="{'background': classes.background}"></view>
+                        <view class="a-lmr">第{{2*(classes.serial + 1) - 1}}{{2*(classes.serial + 1)}}节</view>
+                        <view>{{classes.teacher}}</view>
                     </view>
                     <view class="y-center a-lmt a-mb">
-                        <view class="a-ml a-lmr">{{classObj.className}}</view>
-                        <view>{{classObj.classroom}}</view>
+                        <view class="a-ml a-lmr">{{classes.name}}</view>
+                        <view>{{classes.classroom}}</view>
                     </view>
                 </view>
             </view>
@@ -64,7 +64,6 @@
                 <view class="a-lmt a-mb a-ml a-mr">{{tipsInfo}}</view>
             </view>
         </layout>
-
         <layout title="每日一句" >
             <sentence />
         </layout>
@@ -136,11 +135,11 @@
                         }
                     })
                     if(res.data.status) {
-                        const tables = tableDispose(res.data.data, true);
+                        const tables = tableDispose(res.data.info, true);
                         this.tipsDispose(tables);
                         const tableCache = storage.get("tables") || { term: this.$store.state.curTerm, classes: [] };
                         tableCache.term = this.$store.state.curTerm;
-                        tableCache.classes = res.data.data;
+                        tableCache.classes = res.data.info;
                         storage.setPromise("tables", tableCache);
                     } else {
                         uni.$app.toast("课表加载失败了");

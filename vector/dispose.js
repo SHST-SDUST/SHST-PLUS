@@ -80,7 +80,7 @@ function initAppData(){
         console.log("SetOpenid:", response.openid);
         console.log("Status:", response.status === 1 ? "User Login" : "New user");
         store.commit("setUserStatus", response);
-        response.status === 3 && response.msg && toast(response.msg, 500).then(() => methods.nav("/pages/home/login/login"));
+        response.status === 3 && toast(response.msg, 500).then(() => methods.nav("/pages/home/login/login"));
 
         /* dot */
         const notify = response.initData.tips;

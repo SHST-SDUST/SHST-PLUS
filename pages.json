@@ -16,6 +16,12 @@
         },{
             "path": "pages/home/login/login",
             "style": {}
+        },{
+            "path" : "pages/study/time-table/time-table",
+            "style" : {}
+        },{
+            "path" : "pages/study/time-table/edit",
+            "style" : {}
         }
     ],
     "globalStyle": {
