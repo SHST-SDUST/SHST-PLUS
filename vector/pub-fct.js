@@ -10,9 +10,7 @@ const tableDispose = (info, today = false, week = null) => {
     const curDay = safeDate().getDay() || 7;
     const judgeCurWeekTable = (weeks, curWeek) => {
         const decideCurWeek = (str) => {
-            let [start, end] = str.split("-");
-            start = start >> 0;
-            end = end >> 0;
+            let [start, end] = str.split("-").map(v => v >> 0);
             for(let i=start; i<=end; ++i){
                 if(curWeek === i) return true;
             }
@@ -52,9 +50,8 @@ const tableDispose = (info, today = false, week = null) => {
             unit.background = store.state.colorList[uniqueNum % store.state.colorN];
         }
         if(!tables[day]) tables[day] = [];
-        if(!tables[day][serial]) tables[day][serial] = {background: "#CCC", table: []};
-        if(unit.cur_week) tables[day][serial].background = unit.background;
-        tables[day][serial].table.push(unit);
+        if(!tables[day][serial]) tables[day][serial] = [];
+        tables[day][serial].push(unit);
     })
     if(today) return tables[curDay];
     else return tables;

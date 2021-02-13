@@ -44,7 +44,7 @@
 
         <layout title="今日课程" >
             <view v-for="(item, index) in tables" :key="index">
-                <view class="unit-table" v-for="(classes, classIndex) in item.table" v-if="item && clesses.cur_week" :key="classIndex">
+                <view class="unit-table" v-for="(classes, classIndex) in item" v-if="item && clesses.cur_week" :key="classIndex">
                     <view class="y-center a-mr a-mt">
                         <view class="a-dot" :style="{'background': classes.background}"></view>
                         <view class="a-lmr">第{{2*(classes.serial + 1) - 1}}{{2*(classes.serial + 1)}}节</view>

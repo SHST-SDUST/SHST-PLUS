@@ -181,7 +181,7 @@
             uni.$app.onload(async () => {
                 var res = await uni.$app.request({
                     load: 2,
-                    url: uni.$app.data.url + "/sw/getCustomTable",
+                    url: this.$store.state.url + "/sw/getCustomTable",
                 })
                 let data = JSON.parse(res.data.info)
                 this.tables = data.map(v => {
@@ -212,7 +212,7 @@
                 let unit = {};
                 let tmp = this.unit;
                 propsCopy(unit, tmp, "className", "classroom");
-                unit.term = uni.$app.data.curTerm;
+                unit.term = this.$store.state.curTerm;
                 unit.teacherName = tmp.teacherName || "无";
                 unit.weekStart = tmp.week.range[0][tmp.week.index[0]];
                 unit.weekEnd = tmp.week.range[1][tmp.week.index[1]];
@@ -261,14 +261,14 @@
                     var res = await uni.$app.request({
                         load: 2,
                         method: "POST",
-                        url: uni.$app.data.url + "/sw/setCustomTable",
+                        url: this.$store.state.url + "/sw/setCustomTable",
                         data:{
                             data: JSON.stringify(data)
                         }
                     })
                     uni.$app.toast("保存成功");
                     this.edit = -2;
-                    uni.$app.eventBus.commit("RefreshTable", uni.$app.data.curWeek);
+                    uni.$app.eventBus.commit("RefreshTable", this.$store.state.curWeek);
                 })
             },
             clear: function(){
