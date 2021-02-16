@@ -334,6 +334,10 @@ page {
     flex: 1;
 }
 
+.a-flex-none{
+    flex: none;
+}
+
 .a-flex-warp{
     display: flex;
     flex-wrap: wrap;
@@ -381,6 +385,10 @@ page {
 
 .retract{
     padding: 0 5px;
+}
+
+.border-box{
+    box-sizing: border-box;
 }
 /* end --- 布局 --- end */
 

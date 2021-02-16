@@ -1,27 +1,23 @@
 {
     "pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
         {
-            "path": "pages/home/tips/tips",
-            "style": {}
+            "path": "pages/home/tips/tips"
         },{
             "path": "pages/system/not-found"
         },{
             "path": "pages/system/webview"
         },{
-            "path": "pages/home/funct/funct",
-            "style": {}
+            "path": "pages/home/funct/funct"
         },{
-            "path": "pages/home/user/user",
-            "style": {}
+            "path": "pages/home/user/user"
         },{
-            "path": "pages/home/login/login",
-            "style": {}
+            "path": "pages/home/login/login"
         },{
-            "path" : "pages/study/time-table/time-table",
-            "style" : {}
+            "path" : "pages/study/time-table/time-table"
         },{
-            "path" : "pages/study/time-table/edit",
-            "style" : {}
+            "path" : "pages/study/time-table/edit"
+        },{
+            "path" : "pages/study/classroom/classroom"
         }
     ],
     "globalStyle": {

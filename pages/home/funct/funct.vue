@@ -2,10 +2,18 @@
     <view>
 
         <layout title="学习" color="#FF6347" inherit-color>
-            <view class="y-center">
-                <view class="icon" @click="jump('/pages/study/time-table/time-table', 1)">
-                    <i class="iconfont icon-kebiao"></i>
-                    <view>查课表</view>
+            <view class="y-center a-flex-space-around">
+                <view class="y-center">
+                    <view class="icon" @click="jump('/pages/study/time-table/time-table', 1)">
+                        <i class="iconfont icon-kebiao"></i>
+                        <view>查课表</view>
+                    </view>
+                </view>
+                <view class="y-center">
+                    <view class="icon"  @click="jump('/pages/study/classroom/classroom', 1)">
+                        <i class="iconfont icon-classroom"></i>
+                        <view>查教室</view>
+                    </view>
                 </view>
             </view>
         </layout>

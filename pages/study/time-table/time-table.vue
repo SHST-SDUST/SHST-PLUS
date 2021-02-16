@@ -2,7 +2,7 @@
     <view>
 
         <layout title="查课表">
-            
+
             <!-- section 周次与操作 -->
             <view class="table-top">
                 <view class="week a-lml">第{{week}}周</view>
@@ -22,7 +22,7 @@
                 </view>
             </view>
             <!-- section 周次与操作 -->
-            
+
             <!-- section 日期 -->
             <view class="a-hr timetablehr"></view>
             <view class="a-flex">
@@ -33,7 +33,7 @@
             </view>
             <view class="a-hr timetablehr"></view>
             <!-- section 日期 -->
-            
+
             <!-- section 课表主体 -->
             <view v-for="item in 5" :key="item">
                 <view class="a-flex">
@@ -44,7 +44,7 @@
                             v-if="computedTables[inner] && computedTables[inner][item]"
                             :style="{'background': computedTables[inner][item].background}"
                         >
-                            <view>{{computedTables[inner][item].name}}</view>
+                            <view>{{computedTables[inner][item].name | bracketsFilter}}</view>
                             <view>{{computedTables[inner][item].classroom | charsFilter}}</view>
                             <view>{{computedTables[inner][item].teacher}}</view>
                             <view>{{computedTables[inner][item].weeks_raw}}</view>
@@ -57,7 +57,7 @@
             </view>
             <!-- section 课表主体 -->
         </layout>
-        
+
         <!-- section 自定义配色 -->
         <!--<view class="a-hide" :class="{'a-show':today > '2020-03-26'}">
             <layout>
@@ -170,19 +170,20 @@
         },
         filters: {
             charsFilter: str => str.replace(/[室]/g, ""),
+            bracketsFilter: str => str.replace(/（/g, "(").replace(/）/g, ")"),
         },
         methods: {
             getCache: function(week) {
                 let tableCache = storage.get("tables") || {};
-                // if (tableCache.term === this.$store.state.curTerm) {
+                if (tableCache.term === this.$store.state.curTerm) {
                     console.log("GET TABLE FROM CACHE");
                     let showTableArr = tableDispose(tableCache.classes, false, this.week);
                     this.tables = showTableArr;
                     this.week = week;
                     this.getDate();
-                // } else {
-                    // this.getRemoteTable(week);
-                // }
+                } else {
+                    this.getRemoteTable(week);
+                }
             },
             getRemoteTable: async function(week = null) {
                 let urlTemp = "";

@@ -43,8 +43,8 @@
         </layout>
 
         <layout title="今日课程" >
-            <view v-for="(item, index) in tables" :key="index">
-                <view class="unit-table" v-for="(classes, classIndex) in item" v-if="item && clesses.cur_week" :key="classIndex">
+            <view v-for="(item, index) in computedTables" :key="index">
+                <view class="unit-table" v-for="(classes, classIndex) in item" v-if="item" :key="classIndex">
                     <view class="y-center a-mr a-mt">
                         <view class="a-dot" :style="{'background': classes.background}"></view>
                         <view class="a-lmr">第{{2*(classes.serial + 1) - 1}}{{2*(classes.serial + 1)}}节</view>
@@ -109,6 +109,18 @@
         beforeDestroy: function(){
             uni.$app.eventBus.off("RefreshTable", this.getRemoteTable);
         },
+        computed: {
+            computedTables: function() {
+                const tables = [];
+                this.tables.forEach((units, lineIndex) => {
+                        if(!units) return void 0;
+                        units.forEach(unit => {
+                            if(unit.cur_week) tables[lineIndex] = unit;
+                        })
+                })
+                return tables;
+            }
+        },
         methods: {
             /**
              * 课表处理
@@ -151,8 +163,8 @@
             tipsDispose: function(info) {
                 if(!this.$store.state.user) return void 0;
                 this.tables = info ? info : [];
-                this.tips = info ? "" : "No Class Today";
-                this.tipsInfo = info ? "" : "今天没有课，快去自习室学习吧";
+                this.tips = this.computedTables.length ? "" : "No Class Today";
+                this.tipsInfo = this.computedTables.length ? "" : "今天没有课，快去自习室学习吧";
             },
             refresh: function() {
                 storage.set("table", {term: this.$store.state.curTerm, classes: []});
