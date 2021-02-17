@@ -45,10 +45,7 @@ const tableDispose = (info, today = false, week = null) => {
         unit.weeks_raw = value.weeks_raw;
         unit.classroom = value.classroom;
         unit.cur_week = judgeCurWeekTable(value.weeks, curWeek);
-        if(unit.cur_week){
-            const uniqueNum = Array.prototype.reduce.call(value.name, (pre, cur) => pre+cur.charCodeAt(), 0);
-            unit.background = store.state.colorList[uniqueNum % store.state.colorN];
-        }
+        if(unit.cur_week)unit.background = computeBackground(value.name);
         if(!tables[day]) tables[day] = [];
         if(!tables[day][serial]) tables[day][serial] = [];
         tables[day][serial].push(unit);
@@ -68,6 +65,46 @@ const getCurWeek = (startTime) => {
     return (dayDiff(startTime, formatDate()) / 7) >> 0 + 1;
 }
 
-export {getCurWeek, tableDispose}
+/**
+ * 生成学期数组
+ */
+const generateTerms = (start = null, peak = null) => {
+    const year = start || ((store.state.curTerm.split("-")[1]) >> 0);
+    const limit = peak || store.state.curTerm;
+    const years = [];
+    for (let i = 1; i <= 4; ++i) {
+        let firstTerm = (year - i) + "-" + (year - i + 1) + "-2";
+        let secondTerm = (year - i) + "-" + (year - i + 1) + "-1";
+        if(firstTerm <= limit) {
+            years.push({ show: firstTerm, value: firstTerm });
+        }
+        if(secondTerm <= limit) {
+            years.push({ show: secondTerm, value: secondTerm });
+        }
+    }
+    return years;
+}
 
-export default {getCurWeek, tableDispose}
+/**
+ * 计算dot颜色
+ */
+const computeBackground = (unit, prop = "name") => {
+    if(unit instanceof Array){
+        unit.forEach(v => {
+            const uniqueNum = Array.prototype.reduce.call(v.name, (pre, cur) => pre+cur.charCodeAt(), 0);
+            v.background = store.state.colorList[uniqueNum % store.state.colorN];
+        })
+        return unit;
+    }else{
+        const uniqueNum = Array.prototype.reduce.call(unit, (pre, cur) => pre+cur.charCodeAt(), 0);
+        return store.state.colorList[uniqueNum % store.state.colorN];
+    }
+}
+
+
+export {
+    getCurWeek,
+    tableDispose,
+    generateTerms,
+    computeBackground
+}

@@ -126,51 +126,59 @@ page {
 
 /* start --- 颜色 --- start */
 .a-color-blue {
-    color: var(--color-blue);
+    color: var(--color-blue) !important;
 }
 
 .a-color-white {
-    color: var(--color-white);
+    color: var(--color-white) !important;
 }
 
 .a-color-green {
-    color: var(--color-green);
+    color: var(--color-green) !important;
 }
 
 .a-color-yellow {
-    color: var(--color-yellow);
+    color: var(--color-yellow) !important;
 }
 
 .a-color-orange {
-    color: var(--color-orange);
+    color: var(--color-orange) !important;
 }
 
 .a-color-grey {
-    color: #606266;
+    color: #606266 !important;
 }
 
 .a-background-blue {
-    background-color: var(--color-blue);
+    background-color: var(--color-blue) !important;
 }
 
 .a-background-white {
-    background-color: var(--color-white);
+    background-color: var(--color-white) !important;
 }
 
 .a-background-green {
-    background-color: var(--color-green);
+    background-color: var(--color-green) !important;
 }
 
 .a-background-yellow {
-    background-color: var(--color-yellow);
+    background-color: var(--color-yellow) !important;
 }
 
 .a-background-orange {
-    background-color: var(--color-orange);
+    background-color: var(--color-orange) !important;
 }
 
 .a-background-grey {
-    background-color: #EEE;
+    background-color: #EEE !important;
+}
+
+.a-background-purple {
+    background-color: #ACA4D5 !important;
+}
+
+.a-background-light-orange {
+    background-color: #EAA78C !important;
 }
 /* end --- 颜色 --- end */
 

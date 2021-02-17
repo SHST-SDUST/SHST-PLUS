@@ -3,17 +3,21 @@
 
         <layout title="学习" color="#FF6347" inherit-color>
             <view class="y-center a-flex-space-around">
-                <view class="y-center">
-                    <view class="icon" @click="jump('/pages/study/time-table/time-table', 1)">
-                        <i class="iconfont icon-kebiao"></i>
-                        <view>查课表</view>
-                    </view>
+                <view class="icon" @click="jump('/pages/study/time-table/time-table', 1)">
+                    <i class="iconfont icon-kebiao"></i>
+                    <view>查课表</view>
                 </view>
-                <view class="y-center">
-                    <view class="icon"  @click="jump('/pages/study/classroom/classroom', 1)">
-                        <i class="iconfont icon-classroom"></i>
-                        <view>查教室</view>
-                    </view>
+                <view class="icon"  @click="jump('/pages/study/classroom/classroom', 1)">
+                    <i class="iconfont icon-classroom"></i>
+                    <view>查教室</view>
+                </view>
+                <view class="icon" @click="jump('/pages/study/grade/grade', 1)">
+                    <i class="iconfont icon-grade"></i>
+                    <view>查成绩</view>
+                </view>
+                <view class="icon" @click="jump('/pages/study/exam/exam', 1)">
+                    <i class="iconfont icon-biji-copy"></i>
+                    <view>考试安排</view>
                 </view>
             </view>
         </layout>

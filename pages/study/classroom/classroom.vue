@@ -30,7 +30,7 @@
             <view v-for="item in classrooms.rooms" :key="item">
                 <view class="y-center border-box classroom-row">
                     <view class="y-center">
-                        <view class="a-dot" style="background: #4C98F7"></view>
+                        <view class="a-dot a-background-blue"></view>
                         <view>{{classrooms.build + "-" + item}}</view>
                     </view>
                     <view class="y-center">
@@ -106,7 +106,7 @@
                 let res = await uni.$app.request({
                     load: 2,
                     throttle: true,
-                    url: uni.$app.data.url + "/sw/classroom",
+                    url: this.$store.state.url + "/sw/classroom",
                     data: {
                         date: this.search.date,
                         series: this.search.time,

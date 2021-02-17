@@ -18,6 +18,17 @@
             "path" : "pages/study/time-table/edit"
         },{
             "path" : "pages/study/classroom/classroom"
+        },{
+            "path" : "pages/study/grade/grade"
+        }
+        ,{
+            "path" : "pages/study/exam/exam",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
         }
     ],
     "globalStyle": {
