@@ -91,7 +91,7 @@ const generateTerms = (start = null, peak = null) => {
 const computeBackground = (unit, prop = "name") => {
     if(unit instanceof Array){
         unit.forEach(v => {
-            const uniqueNum = Array.prototype.reduce.call(v.name, (pre, cur) => pre+cur.charCodeAt(), 0);
+            const uniqueNum = Array.prototype.reduce.call(v[prop], (pre, cur) => pre+cur.charCodeAt(), 0);
             v.background = store.state.colorList[uniqueNum % store.state.colorN];
         })
         return unit;
