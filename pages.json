@@ -20,15 +20,18 @@
             "path" : "pages/study/classroom/classroom"
         },{
             "path" : "pages/study/grade/grade"
-        }
-        ,{
-            "path" : "pages/study/exam/exam",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
+        },{
+            "path" : "pages/study/exam/exam"
+        },{
+            "path" : "pages/study/credit-situation/credit-situation"
+        },{
+            "path" : "pages/study/comply-plan/comply-plan"
+        },{
+            "path" : "pages/study/teach-book/teach-book"  
+        },{
+            "path" : "pages/study/notice/notice"
+        },{
+            "path" : "pages/study/notice/detail"
         }
     ],
     "globalStyle": {

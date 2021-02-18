@@ -21,6 +21,26 @@
                 </view>
             </view>
         </layout>
+        <layout title="信息" color="#3CB371" inherit-color>
+            <view class="y-center a-flex-space-around">
+                <view class="icon" @click="jump('/pages/study/comply-plan/comply-plan', 1)">
+                    <i class="iconfont icon-jihua"></i>
+                    <view>执行计划</view>
+                </view>
+                <view class="icon"  @click="jump('/pages/study/credit-situation/credit-situation', 1)">
+                    <i class="iconfont icon-mc-wcqk"></i>
+                    <view>完成情况</view>
+                </view>
+                <view class="icon" @click="jump('/pages/study/teach-book/teach-book', 1)">
+                    <i class="iconfont icon-jiaofu-1"></i>
+                    <view>教材信息</view>
+                </view>
+                <view class="icon" @click="jump('/pages/study/notice/notice', 1)">
+                    <i class="iconfont icon-gonggao1"></i>
+                    <view>校内公告</view>
+                </view>
+            </view>
+        </layout>
     </view>
 </template>
 
