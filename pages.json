@@ -32,6 +32,16 @@
             "path" : "pages/study/notice/notice"
         },{
             "path" : "pages/study/notice/detail"
+        },{
+            "path": "pages/user/about/about",
+            "style": {"navigationBarBackgroundColor": "#fff"}
+        }, {
+            "path": "pages/user/reward/reward",
+            "style": {"navigationBarBackgroundColor": "#fff"}
+        }, {
+            "path": "pages/user/reward/reward-list"
+        }, {
+            "path": "pages/user/announce/announce"
         }
     ],
     "globalStyle": {

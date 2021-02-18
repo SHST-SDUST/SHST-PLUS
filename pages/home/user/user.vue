@@ -9,15 +9,15 @@
             <view class="user-info-con">
                 <view class="unit-info top">
                     <view>学号</view>
-                    <view>{{account}}</view>
+                    <view>{{user.account}}</view>
                 </view>
                 <view class="unit-info">
                     <view>姓名</view>
-                    <view>{{name}}</view>
+                    <view>{{user.name}}</view>
                 </view>
                 <view class="unit-info">
                     <view>学院</view>
-                    <view>{{academy}}</view>
+                    <view>{{user.academy}}</view>
                 </view>
                 <!-- #ifdef MP-WEIXIN -->
                 <view class="a-hide" :class="{'a-show':today > '2020-09-01'}">
@@ -58,7 +58,7 @@
                     <view>关于</view>
                     <view class="iconfont icon-arrow-right"></view>
                 </view>
-                <view class="a-btn a-btn-orange a-btn-large btn-full" @click="logout">注销</view>
+                <view class="a-btn a-btn-orange a-btn-large btn-full" @click="nav('/pages/home/login/login?status=1')">注销</view>
 
             </view>
         </layout>
@@ -71,46 +71,33 @@
     import storage from "@/modules/storage.js";
     export default {
         data: () => ({
-            academy: " ",
-            name: " ",
-            account: " ",
+            user: {
+                academy: "游客",
+                name: "游客",
+                account: "游客",
+            },
             point: "none",
             today: util.formatDate()
         }),
         created: function() {
-            return void 0;
             uni.$app.onload(async () => {
-                storage.getPromise("point").then(res => {
-                    if (res !== uni.$app.data.point) this.point = "block";
+                storage.getPromise("point").then(data => {
+                    if (data !== this.$store.state.point) this.point = "block";
                 })
-                if (uni.$app.data.user === 0) {
-                    let tipsInfo = "游客";
-                    this.academy = tipsInfo;
-                    this.name = tipsInfo;
-                    this.account = tipsInfo;
-                    return void 0;
-                }
-                var res = await storage.getPromise("user-info");
-                if (res && res.account) {
+                if (this.$store.state.user === 0) return void 0;
+                const user = await storage.getPromise("user-info");
+                if (user && user.account) {
                     console.log("GET USERINFO FROM CACHE");
-                    this.academy = res.academy;
-                    this.name = res.name;
-                    this.account = res.account;
+                    this.user = user;
                 } else {
                     console.log("GET USERINFO FROM REMOTE");
-                    var res = await uni.$app.request({
+                    const res = await uni.$app.request({
                         load: 1,
                         throttle: true,
-                        url: uni.$app.data.url + "/sw/userInfo",
+                        url: this.$store.state.url + "/sw/userInfo",
                     })
-                    if (res.data.info) {
-                        storage.setPromise("user-info", res.data.info);
-                        this.academy = res.data.info.academy;
-                        this.name = res.data.info.name;
-                        this.account = res.data.info.account;
-                    } else {
-                        uni.$app.toast("服务器错误");
-                    }
+                    storage.setPromise("user-info", res.data.info);
+                    this.user = res.data.info;
                 }
             })
         },
@@ -120,9 +107,6 @@
                 if(uni.hideTabBarRedDot) uni.hideTabBarRedDot({index: 2});
                 this.nav(url);
             },
-            logout: function(e) {
-                this.nav("/pages/home/login/login?status=1");
-            }
         }
     }
 </script>
