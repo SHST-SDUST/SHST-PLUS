@@ -41,7 +41,7 @@
                 </view>
             </view>
         </layout>
-        
+
     </view>
 </template>
 
@@ -62,14 +62,12 @@
         },
         methods: {
             jump: async function(path, check) {
-                if (check === 1 && this.$store.state.user !== 1) {
+                if(check === 1 && this.$store.state.user !== 1) {
                     let [err, choice] = await uni.showModal({
                         title: "提示",
                         content: "该功能需要绑定强智教务系统，是否前去绑定",
                     })
-                    if (choice.confirm) {
-                        this.nav("/pages/home/auxiliary/login");
-                    }
+                    if(choice.confirm) this.nav("/pages/home/login/login");
                     return void 0;
                 }
                 this.nav(path);
