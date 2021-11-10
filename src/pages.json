@@ -1,6 +1,8 @@
 {
-    "pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+    "pages": [
         {
+            "path": "pages/home/login/login"
+        },{
             "path": "pages/home/tips/tips"
         },{
             "path": "pages/system/not-found"
@@ -10,8 +12,6 @@
             "path": "pages/home/funct/funct"
         },{
             "path": "pages/home/user/user"
-        },{
-            "path": "pages/home/login/login"
         },{
             "path" : "pages/study/time-table/time-table"
         },{
