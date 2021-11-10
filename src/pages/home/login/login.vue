@@ -12,7 +12,7 @@
                 <view class="input-view y-center x-full">
                     <i class="iconfont icon-account"></i>
                     <input
-                        v-model="account"
+                        v-model="account.name"
                         class="a-input x-full"
                         name="account"
                         placeholder="账号"
@@ -22,13 +22,22 @@
                 <view class="input-view y-center x-full a-lmt">
                     <i class="iconfont icon-password"></i>
                     <input
-                        v-model="password"
+                        v-model="account.password"
                         class="a-input x-full"
                         name="password"
                         placeholder="密码"
                         :password="hidePassword"
                     />
-                    <switch @change="hidePassword = !hidePassword"></switch>
+                    <switch @change="info.hidePassword = !info.hidePassword"></switch>
+                </view>
+                <view class="input-view y-center x-full a-lmt">
+                    <i class="iconfont icon-tupian"></i>
+                    <input v-model="code" class="a-input x-full" name="code" placeholder="验证码" />
+                    <image
+                        :src="'data:image/jpg;base64,' + info.codeImgBase64"
+                        class="verify-code"
+                        @click="getVerifyCode"
+                    ></image>
                 </view>
             </view>
             <view class="a-flex a-lmt">
@@ -40,8 +49,8 @@
         <view class="tips a-flex-space-between">
             <view>请输入强智系统账号密码</view>
         </view>
-        <view class="status a-lmt">{{ status }}</view>
-        <view v-if="resetApp" class="status a-lmt" @click="reStartApp()">
+        <view class="status a-lmt">{{ info.status }}</view>
+        <view v-if="info.resetApp" class="status a-lmt" @click="reStartApp()">
             初始化信息失败 点我重载小程序
         </view>
 
@@ -65,81 +74,81 @@
     </view>
 </template>
 
-<script>
+<script lang="ts">
 import storage from "@/modules/storage";
-export default {
-    data: () => ({
-        account: "",
+import { confirm } from "@/modules/toast";
+import { Component, Vue } from "vue-property-decorator";
+import { getVerifyCode, login } from "@/models/login";
+
+@Component
+export default class Login extends Vue {
+    protected account = {
+        name: "",
         password: "",
+        code: "",
+    };
+    protected info = {
+        codeImgBase64: "",
         status: "",
         resetApp: false,
         hidePassword: true,
-    }),
-    created: function () {
+    };
+    protected created(): void {
         uni.$app.onload(() => {
-            storage.getPromise("user").then(res => {
+            storage.getPromise<{ account: string; password: string }>("user").then(res => {
                 if (res && res.account && res.password) {
-                    this.account = res.account;
-                    this.password = res.password;
+                    this.account.name = res.account;
+                    this.account.password = res.password;
                 }
             });
+            this.getVerifyCode();
         });
-    },
-    methods: {
-        enter: async function () {
-            if (this.account.length == 0 || this.password.length == 0) {
-                uni.$app.toast("用户名和密码不能为空");
-            } else {
-                const res = await uni.$app.request({
-                    load: 3,
-                    // #ifdef MP-WEIXIN
-                    url: uni.$app.data.url + "/auth/login/1",
-                    // #endif
-                    // #ifdef MP-QQ
-                    // eslint-disable-next-line no-dupe-keys
-                    url: uni.$app.data.url + "/auth/login/2",
-                    // #endif
-                    method: "POST",
-                    throttle: true,
-                    data: {
-                        account: this.account,
-                        password: this.password,
-                    },
+    }
+    async enter(): Promise<void> {
+        if (this.account.name.length == 0 || this.account.password.length == 0) {
+            uni.$app.toast("用户名和密码不能为空");
+            return void 0;
+        }
+        if (this.account.code.length != 4) {
+            uni.$app.toast("验证码必须为4位");
+            return void 0;
+        }
+        const res = await login(this.account.name, this.account.password, this.account.code);
+        if (res.data.status === 1) {
+            storage.removePromise("tables");
+            storage.removePromise("user-info");
+            storage
+                .setPromise("user", {
+                    account: this.account.name,
+                    password: this.account.password,
+                })
+                .then(() => {
+                    this.$store.commit("login");
+                    this.nav("/pages/home/tips/tips", "relunch");
                 });
-                if (res.data.status === 1) {
-                    storage.removePromise("tables");
-                    storage.removePromise("user-info");
-                    storage
-                        .setPromise("user", {
-                            account: this.account,
-                            password: this.password,
-                        })
-                        .then(succ => {
-                            this.$store.commit("login");
-                            this.nav("/pages/home/tips/tips", "relunch");
-                        });
-                } else if (res.data.status === 2) {
-                    this.status = res.data.msg;
-                    uni.$app.toast(res.data.msg);
-                } else if (res.data.status === 3) {
-                    this.resetApp = true;
-                    uni.$app.toast(res.data.msg);
-                }
-            }
-        },
-        reStartApp: async function () {
-            const [err, choice] = await uni.showModal({
-                title: "提示",
-                content: "确定要重载小程序吗？",
-            });
-            if (choice.confirm) {
-                this.$store.commit("clearOpenid");
-                uni.$app.reInitApp();
-                this.nav("/pages/home/tips/tips", "relunch");
-            }
-        },
-    },
-};
+        } else if (res.data.status === 2) {
+            this.info.status = res.data.msg;
+            uni.$app.toast(res.data.msg);
+        } else if (res.data.status === 3) {
+            this.info.resetApp = true;
+            uni.$app.toast(res.data.msg);
+        }
+    }
+    async reStartApp(): Promise<void> {
+        const choice = await confirm("提示", "确定要重载小程序吗？");
+        if (choice) {
+            this.$store.commit("clearOpenid");
+            uni.$app.reInitApp();
+            this.nav("/pages/home/tips/tips", "relunch");
+        }
+    }
+    getVerifyCode(): void {
+        uni.$app.throttle(500, async () => {
+            const res = await getVerifyCode();
+            this.info.codeImgBase64 = res.data.img;
+        });
+    }
+}
 </script>
 
 <style>
@@ -185,5 +194,10 @@ page {
 }
 switch {
     zoom: 0.8;
+}
+
+.verify-code {
+    height: 22px;
+    width: 62px;
 }
 </style>
