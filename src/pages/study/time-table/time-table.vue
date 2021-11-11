@@ -8,7 +8,7 @@
                 @refresh="refresh"
             ></c-time-table-header>
             <view class="a-hr"></view>
-            <c-time-table-body :start="start" :week="week" :table="table"></c-time-table-body>
+            <c-time-table-body :start="start" :week="week" :table="tables"></c-time-table-body>
         </c-card>
     </view>
 </template>
@@ -16,8 +16,11 @@
 <script lang="ts">
 import storage from "@/modules/storage";
 import { Component, Vue } from "vue-property-decorator";
-import { RemoteTableInfo, tableDispose } from "@/models/table-item";
-import { CTimeTableHeader, CTimeTableBody, CCard } from "shst-campus";
+import { fetchTimeTable, RemoteTableInfo, tableDispose } from "@/models/table-item";
+// import { CTimeTableHeader, CTimeTableBody, CCard } from "shst-campus";
+import CTimeTableHeader from "@/components/shst-campus/c-time-table-header/c-time-table-header.vue";
+import CTimeTableBody from "@/components/shst-campus/c-time-table-body/c-time-table-body.vue";
+import CCard from "@/components/shst-campus/c-card/c-card.vue";
 import { DefinedTableItem } from "shst-campus/lib/types/time-table";
 
 type TableCache = {
@@ -31,11 +34,13 @@ export default class TimeTable extends Vue {
     protected ad = 0;
     protected tables: DefinedTableItem[] = [];
     protected week = uni.$app.data.curWeek;
+    protected start = uni.$app.data.curTermStart;
     protected created(): void {
         uni.$app.onload(() => {
-            this.week = this.$store.state.curWeek;
-            this.getCache(this.week);
+            this.week = uni.$app.data.curWeek;
+            this.start = uni.$app.data.curTermStart;
             this.ad = this.$store.state.initData.adSelect.table;
+            this.getCache(this.week);
         });
         uni.$app.eventBus.on("RefreshTable", this.refresh);
     }
@@ -54,14 +59,11 @@ export default class TimeTable extends Vue {
     private async getRemoteTable(week: number | null = null) {
         let urlTemp = "";
         if (typeof week === "number") urlTemp += "/" + week;
-        const res = await uni.$app.request<{ info: RemoteTableInfo; week: number }>({
-            load: 2,
-            url: this.$store.state.url + "/sw/table" + urlTemp,
-            data: {
-                week: this.$store.state.curWeek,
-                term: this.$store.state.curTerm,
-            },
-        });
+        const res = await fetchTimeTable(
+            uni.$app.data.url + "/sw/table" + urlTemp,
+            this.$store.state.curWeek,
+            this.$store.state.curTerm
+        );
         console.log("GET TABLE FROM REMOTE WEEK " + week);
         const tables = tableDispose(res.data.info, false, this.week);
         this.tables = tables;

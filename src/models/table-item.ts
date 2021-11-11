@@ -1,6 +1,8 @@
 import store from "@/store/index";
 import { safeDate } from "@/modules/datetime";
 import { computeBackground } from "@/vector/pub-fct";
+import { PromiseResponse } from "@/modules/request";
+import { DefinedTableItem } from "@/components/shst-campus/types/time-table";
 
 /**
  * 统一处理课表功能
@@ -14,15 +16,7 @@ export type RemoteTableInfo = Array<{
     weeks_raw: string;
     classroom: string;
 }>;
-export type ClassItem = Omit<RemoteTableInfo[0], "day" | "classroom" | "name"> & {
-    week: number;
-    serial: number;
-    weeks: string[];
-    className: string;
-    classRoom: string;
-    background: string;
-    cur_week: boolean;
-};
+export type ClassItem = DefinedTableItem & { weeks: string[]; cur_week: boolean };
 export function tableDispose(
     info: RemoteTableInfo,
     today = false,
@@ -56,8 +50,8 @@ export function tableDispose(
     info.forEach(value => {
         if (!value) return void 0;
         const unit: ClassItem = Object.create(null);
-        const day = value.day;
-        const serial = value.serial;
+        const day = value.day + 1;
+        const serial = value.serial + 1;
         if (today && day !== curDay) return void 0;
         unit.week = day;
         unit.serial = serial;
@@ -65,11 +59,25 @@ export function tableDispose(
         unit.weeks = value.weeks;
         unit.background = "#CCC";
         unit.teacher = value.teacher;
-        unit.weeks_raw = value.weeks_raw;
+        unit.ext = value.weeks_raw;
         unit.classRoom = value.classroom;
         unit.cur_week = judgeCurWeekTable(value.weeks, curWeek);
+        unit.curWeek = unit.cur_week;
+        if (today && !unit.curWeek) return void 0;
         if (unit.cur_week) unit.background = computeBackground(value.name);
         tables.push(unit);
     });
     return tables;
 }
+
+export const fetchTimeTable = (
+    url: string,
+    week: number | string,
+    term: string
+): PromiseResponse<{ info: RemoteTableInfo; week: number }> => {
+    return uni.$app.request({
+        load: 2,
+        url,
+        data: { week, term },
+    });
+};

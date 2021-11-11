@@ -9,7 +9,7 @@ export function getCurWeek(startTime: string): number {
     console.log(formatDate());
     if (formatDate() < startTime) return 1;
     const week = dayDiff(startTime, formatDate()) / 7 + 1;
-    return week;
+    return week >> 0;
 }
 
 /**

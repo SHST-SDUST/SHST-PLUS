@@ -32,6 +32,9 @@ export default {
 <style lang="scss">
 @import "@/vector/resources/iconfont.css";
 @import "@/vector/resources/asse.mini.css";
+@import "@/components/shst-campus/styles/asse.css";
+@import "@/components/shst-campus/styles/iconfont.css";
+@import "@/components/shst-campus/styles/asse-style.scss";
 button:after {
     border: none;
 }

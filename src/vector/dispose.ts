@@ -96,6 +96,10 @@ function initAppData(this: GlobalVueComponent) {
 
             /* 初始化全局信息 */
             store.commit("setInitData", response.initData);
+            $app.data.curTerm = response.initData.curTerm;
+            $app.data.curTermStart = response.initData.termStart;
+            $app.data.curWeek = response.initData.curWeek;
+            $app.data.initData = response.initData;
 
             /* 自定义配色 */
             if ($app.data.initData.custom) {

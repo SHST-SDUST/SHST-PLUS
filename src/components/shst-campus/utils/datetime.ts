@@ -5,6 +5,7 @@ export function safeDate(): Date;
 export function safeDate(date: Date): Date;
 export function safeDate(timestamp: number): Date;
 export function safeDate(dateTimeStr: string): Date;
+export function safeDate(compatible: number | string | Date): Date;
 export function safeDate(
     year: number,
     month: number,
@@ -31,27 +32,13 @@ export function safeDate(
         return new Date(p1);
     } else if (typeof p1 === "number" && typeof p2 === "number") {
         // 第一和第二个参数都为`Number`
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        return new Date(p1, p2, p3 || null, p4 || null, p5 || null, p6 || null, p7 || null);
+        return new Date(p1, p2, p3 || 1, p4 || 0, p5 || 0, p6 || 0, p7 || 0);
     } else if (typeof p1 === "string") {
         // 第一个参数为`String`
         return new Date(p1.replace(/-/g, "/"));
     }
     throw new Error("No suitable parameters");
 }
-
-// type DateParams =
-//     | []
-//     | [string]
-//     | [number, number?, number?, number?, number?, number?, number?]
-//     | [Date];
-// const safeDate = <T extends DateParams>(...args: T): Date => {
-//     const copyParams = args.slice(0);
-//     if (typeof copyParams[0] === "string") copyParams[0] = copyParams[0].replace(/-/g, "/");
-//     return new Date(...(args as ConstructorParameters<typeof Date>));
-// };
-
 /**
  * yyyy年 MM月 dd日 hh1~12小时制(1-12) HH24小时制(0-23) mm分 ss秒 S毫秒 K周
  */
@@ -79,47 +66,24 @@ export const formatDate = (fmt = "yyyy-MM-dd", date = safeDate()): string => {
     });
     return fmt;
 };
-
 /**
  * 增加时间
  */
 export const addDate = (date: Date, years = 0, months = 0, days = 0): Date => {
-    if (days !== 0) date.setDate(date.getDate() + days);
-    if (months !== 0) date.setMonth(date.getMonth() + months);
-    if (years !== 0) date.setFullYear(date.getFullYear() + years);
-    return date;
-};
-
-/**
- * 拓展Date原型 增加时间
- */
-export const extDate = (): void => {
-    Date.prototype.addDate = function (years = 0, months = 0, days = 0): void {
-        if (days !== 0) this.setDate(this.getDate() + days);
-        if (months !== 0) this.setMonth(this.getMonth() + months);
-        if (years !== 0) this.setFullYear(this.getFullYear() + years);
-    };
-};
-
-/**
- * 日期相差天数
- */
-export const dayDiff = (startDateString: string, endDateString: string): number => {
-    const separator = "-"; //日期分隔符
-    const startDates = startDateString.split(separator).map(v => Number(v));
-    const endDates = endDateString.split(separator).map(v => Number(v));
-    const startDate = safeDate(startDates[0], startDates[1] - 1, startDates[2]);
-    const endDate = safeDate(endDates[0], endDates[1] - 1, endDates[2]);
-    const diff = Math.floor((endDate.getTime() - startDate.getTime()) / 1000 / 60 / 60 / 24); //把相差的毫秒数转换为天数
-    return diff;
+    const newDate = safeDate(date);
+    if (days !== 0) newDate.setDate(newDate.getDate() + days);
+    if (months !== 0) newDate.setMonth(newDate.getMonth() + months);
+    if (years !== 0) newDate.setFullYear(newDate.getFullYear() + years);
+    return newDate;
 };
 
 /**
  * 精确的时间差
  */
 export const timeDiff = (
-    startDateString: string,
-    endDateString: string
+    startDateString: string | number | Date,
+    endDateString: string | number | Date,
+    abs = false
 ): {
     days: number;
     hours: number;
@@ -128,12 +92,17 @@ export const timeDiff = (
 } => {
     const oldDate = safeDate(startDateString);
     const newDate = safeDate(endDateString);
+    const sign = abs ? (newDate.getTime() - oldDate.getTime() > 0 ? 1 : -1) : 1;
     const diffTime = Math.abs(newDate.getTime() - oldDate.getTime()) / 1000; // 转为秒
     const days = Math.floor(diffTime / 86400);
     const hours = Math.floor(diffTime / 3600) - 24 * days;
     const minutes = Math.floor((diffTime % 3600) / 60);
     const seconds = Math.floor(diffTime % 60);
-    return { days, hours, minutes, seconds };
+    return {
+        days: days * sign,
+        hours: hours * sign,
+        minutes: minutes * sign,
+        seconds: seconds * sign,
+    };
 };
-
-export default { safeDate, formatDate, extDate, dayDiff, addDate, timeDiff };
+export default { safeDate, formatDate, addDate, timeDiff };

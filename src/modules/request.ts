@@ -8,7 +8,7 @@ const throttle = operateLimit.throttleFactory();
 const debounce = operateLimit.debounceFactory();
 
 const headers = {
-    "cookie": "",
+    "cookie": "PHPSESSID=tgt2v1fqnbd8ii5d2outegpk16;",
     "content-type": "application/x-www-form-urlencoded",
 };
 
@@ -118,6 +118,7 @@ type ResponseDataType = UniApp.RequestSuccessCallbackResult["data"];
 export type PromiseFulfilled<T> = Omit<UniApp.RequestSuccessCallbackResult, "data"> & {
     data: T;
 };
+export type PromiseResponse<T> = Promise<PromiseFulfilled<T>>;
 export const request = <T extends ResponseDataType>(
     requestInfo: RequestInfo
 ): Promise<PromiseFulfilled<T>> => {

@@ -26,13 +26,18 @@
                         class="a-input x-full"
                         name="password"
                         placeholder="密码"
-                        :password="hidePassword"
+                        :password="info.hidePassword"
                     />
                     <switch @change="info.hidePassword = !info.hidePassword"></switch>
                 </view>
                 <view class="input-view y-center x-full a-lmt">
                     <i class="iconfont icon-tupian"></i>
-                    <input v-model="code" class="a-input x-full" name="code" placeholder="验证码" />
+                    <input
+                        v-model="account.code"
+                        class="a-input x-full"
+                        name="code"
+                        placeholder="验证码"
+                    />
                     <image
                         :src="'data:image/jpg;base64,' + info.codeImgBase64"
                         class="verify-code"
@@ -139,13 +144,14 @@ export default class Login extends Vue {
         if (choice) {
             this.$store.commit("clearOpenid");
             uni.$app.reInitApp();
-            this.nav("/pages/home/tips/tips", "relunch");
+            this.nav("/pages/home/tips/tips", "tab");
         }
     }
     getVerifyCode(): void {
         uni.$app.throttle(500, async () => {
             const res = await getVerifyCode();
             this.info.codeImgBase64 = res.data.img;
+            this.account.code = res.data.code;
         });
     }
 }

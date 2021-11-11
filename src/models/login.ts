@@ -34,9 +34,10 @@ export const login = (
 export const getVerifyCode = (): Promise<
     PromiseFulfilled<{
         img: string;
+        code: string;
     }>
 > => {
-    return uni.$app.request<{ img: string }>({
+    return uni.$app.request<{ img: string; code: string }>({
         url: uni.$app.data.url + "/auth/getVerifyCode",
     });
 };
