@@ -143,8 +143,8 @@ export default {
                 ++counter;
             });
             this.grade.credit = creditTmp;
-            this.grade.gpa = (gpaTmp / counter).toFixed(2);
-            this.grade.weighted = (weightedTmp / creditTmp).toFixed(2);
+            this.grade.gpa = counter ? (gpaTmp / counter).toFixed(2) : 0;
+            this.grade.weighted = creditTmp ? (weightedTmp / creditTmp).toFixed(2) : 0;
             this.grade.list = res.data.info;
             this.grade.tips = this.grade.list.length ? "" : "暂无成绩信息";
             this.ad.show = this.grade.list.length >= 3 ? true : false;

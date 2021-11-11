@@ -16,17 +16,13 @@
 <script lang="ts">
 import storage from "@/modules/storage";
 import { Component, Vue } from "vue-property-decorator";
-import { fetchTimeTable, RemoteTableInfo, tableDispose } from "@/models/table-item";
+import { fetchTimeTable, TableCache, tableDispose } from "@/models/table-item";
 // import { CTimeTableHeader, CTimeTableBody, CCard } from "shst-campus";
 import CTimeTableHeader from "@/components/shst-campus/c-time-table-header/c-time-table-header.vue";
 import CTimeTableBody from "@/components/shst-campus/c-time-table-body/c-time-table-body.vue";
 import CCard from "@/components/shst-campus/c-card/c-card.vue";
-import { DefinedTableItem } from "shst-campus/lib/types/time-table";
+import { DefinedTableItem } from "@/components/shst-campus/types/time-table";
 
-type TableCache = {
-    term: string;
-    classes: RemoteTableInfo;
-};
 @Component({
     components: { CTimeTableHeader, CTimeTableBody, CCard },
 })

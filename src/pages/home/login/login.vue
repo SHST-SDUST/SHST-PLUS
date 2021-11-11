@@ -120,8 +120,6 @@ export default class Login extends Vue {
         }
         const res = await login(this.account.name, this.account.password, this.account.code);
         if (res.data.status === 1) {
-            storage.removePromise("tables");
-            storage.removePromise("user-info");
             storage
                 .setPromise("user", {
                     account: this.account.name,
@@ -129,7 +127,7 @@ export default class Login extends Vue {
                 })
                 .then(() => {
                     this.$store.commit("login");
-                    this.nav("/pages/home/tips/tips", "relunch");
+                    this.nav("/pages/home/tips/tips", "tab");
                 });
         } else if (res.data.status === 2) {
             this.info.status = res.data.msg;
@@ -154,6 +152,10 @@ export default class Login extends Vue {
             this.account.code = res.data.code;
         });
     }
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    protected onShareAppMessage(): void {}
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    protected onShareTimeline(): void {}
 }
 </script>
 

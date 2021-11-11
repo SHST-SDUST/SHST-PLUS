@@ -68,7 +68,7 @@ console.log("Version:", data.version);
 
 if (process.env.NODE_ENV === "development") {
     console.log("Environment:", "development");
-    data.url = "http://shstplus.touchczy.top";
+    data.url = "https://shstplus.touchczy.top";
 } else {
     console.log("Environment:", "production");
     data.url = "https://shstplus.touchczy.top";

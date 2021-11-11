@@ -58,18 +58,19 @@
         </layout>
 
         <layout title="今日课程">
-            <view v-for="(item, index) in computedTables" :key="index">
-                <view v-for="(classes, classIndex) in item" :key="classIndex" class="unit-table">
+            <view v-for="(item, index) in table.list" :key="index">
+                <view class="unit-table">
                     <view class="y-center a-mr a-mt">
-                        <view class="a-dot" :style="{ 'background': classes.background }"></view>
+                        <view class="a-dot" :style="{ 'background': item.background }"></view>
                         <view class="a-lmr">
-                            第{{ 2 * (classes.serial + 1) - 1 }}{{ 2 * (classes.serial + 1) }}节
+                            第{{ 2 * item.serial - 1 }}{{ 2 * item.serial }}节
                         </view>
-                        <view>{{ classes.teacher }}</view>
+                        <view>{{ item.teacher }}</view>
+                        <view>{{ item.ext }}</view>
                     </view>
                     <view class="y-center a-lmt a-mb">
-                        <view class="a-ml a-lmr">{{ classes.name }}</view>
-                        <view>{{ classes.classroom }}</view>
+                        <view class="a-ml a-lmr">{{ item.className }}</view>
+                        <view>{{ item.classRoom }}</view>
                     </view>
                 </view>
             </view>
@@ -87,45 +88,36 @@
     </view>
 </template>
 
-<script>
+<script lang="ts">
 import storage from "@/modules/storage";
 import { formatDate } from "@/modules/datetime";
-import { tableDispose } from "@/models/table-item";
+import { ClassItem, fetchTimeTable, TableCache, tableDispose } from "@/models/table-item";
 import weather from "@/components/weather/weather.vue";
 import sentence from "@/components/sentence/sentence.vue";
 import advertise from "@/components/advertise/advertise.vue";
-export default {
+import { Component, Vue } from "vue-property-decorator";
+import { DefinedTableItem } from "@/components/shst-campus/types/time-table";
+@Component({
     components: { weather, sentence, advertise },
-    data: () => ({
-        swiper: [],
-        table: {
-            list: [],
-            tips: "数据加载中",
-            info: "数据加载中",
-        },
-        article: {
-            name: "",
-            url: "",
-        },
-        ad: {
-            show: false,
-            select: 0,
-        },
-        today: formatDate("yyyy-MM-dd K"),
-    }),
-    computed: {
-        computedTables: function () {
-            const tables = [];
-            this.table.list.forEach((units, lineIndex) => {
-                if (!units) return void 0;
-                units.forEach(unit => {
-                    if (unit.cur_week) tables[lineIndex] = unit;
-                });
-            });
-            return tables;
-        },
-    },
-    created: function () {
+})
+export default class Tips extends Vue {
+    protected swiper: { img: string; url: string }[] = [];
+    protected table: { list: DefinedTableItem[]; tips: string; info: string } = {
+        list: [],
+        tips: "数据加载中",
+        info: "数据加载中",
+    };
+    protected article = {
+        name: "",
+        url: "",
+    };
+    protected ad = {
+        show: false,
+        select: 0,
+    };
+    protected today = formatDate("yyyy-MM-dd K");
+
+    protected created(): void {
         uni.$app.onload(() => {
             this.swiper = this.$store.state.initData.ads;
             this.article.name = this.$store.state.initData.articleName;
@@ -139,79 +131,69 @@ export default {
             }
         });
         uni.$app.eventBus.on("RefreshTable", this.getRemoteTable);
-    },
-    beforeDestroy: function () {
+    }
+
+    protected beforeDestroy(): void {
         uni.$app.eventBus.off("RefreshTable", this.getRemoteTable);
-    },
-    methods: {
-        /**
-         * 课表处理
-         */
-        getTable: function () {
-            const tableCache = storage.get("tables") || {};
-            if (tableCache.term === this.$store.state.curTerm) {
-                console.log("GET TABLE FROM CACHE");
-                const tables = tableDispose(tableCache.classes, true);
-                this.tipsDispose(tables);
-            } else {
-                this.getRemoteTable();
-            }
-        },
-        getRemoteTable: async function (load = 1) {
-            if (this.$store.state.user === 1) {
-                console.log("GET TABLE FROM REMOTE");
-                const res = await uni.$app.request({
-                    load: load,
-                    url: this.$store.state.url + "/sw/table",
-                    data: {
-                        week: this.$store.state.curWeek,
-                        term: this.$store.state.curTerm,
-                    },
-                });
-                if (res.data.status) {
-                    const tables = tableDispose(res.data.info, true);
-                    this.tipsDispose(tables);
-                    const tableCache = storage.get("tables") || {
-                        term: this.$store.state.curTerm,
-                        classes: [],
-                    };
-                    tableCache.term = this.$store.state.curTerm;
-                    tableCache.classes = res.data.info;
-                    storage.setPromise("tables", tableCache);
-                } else {
-                    uni.$app.toast("课表加载失败了");
-                    this.table.tips = "加载失败";
-                    this.table.info = "加载失败了，重新登录试一下";
-                }
-            }
-        },
-        tipsDispose: function (info) {
-            if (!this.$store.state.user) return void 0;
-            this.table.list = info ? info : [];
-            this.table.tips = this.computedTables.length ? "" : "No Class Today";
-            this.table.info = this.computedTables.length ? "" : "今天没有课，快去自习室学习吧";
-        },
-        refresh: function () {
-            storage.set("table", { term: this.$store.state.curTerm, classes: [] });
-            this.getRemoteTable(2);
-        },
-        articleJump: function (url) {
-            // #ifdef MP-WEIXIN
-            this.nav(url, "webview");
-            // #endif
-            // #ifndef MP-WEIXIN
-            this.copy(url);
-            // #endif
-        },
-        bindSW: function () {
-            !this.$store.state.user && this.nav("/pages/home/login/login");
-        },
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        onShareAppMessage: () => {},
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        onShareTimeline: () => {},
-    },
-};
+    }
+
+    protected getTable(): void {
+        const tableCache = <TableCache>storage.get("tables") || {};
+        if (tableCache.term === this.$store.state.curTerm) {
+            console.log("GET TABLE FROM CACHE");
+            const tables = tableDispose(tableCache.classes || [], true);
+            this.tipsDispose(tables);
+        } else {
+            this.getRemoteTable();
+        }
+    }
+    protected async getRemoteTable(load = 1): Promise<void> {
+        console.log("GET TABLE FROM REMOTE");
+        const res = await fetchTimeTable(
+            this.$store.state.url + "/sw/table",
+            this.$store.state.curWeek,
+            this.$store.state.curTerm,
+            load
+        );
+        if (res.data.status) {
+            const tables = tableDispose(res.data.info, true);
+            this.tipsDispose(tables);
+            storage.setPromise("tables", {
+                term: this.$store.state.curTerm,
+                classes: res.data.info,
+            });
+        } else {
+            uni.$app.toast("课表加载失败了");
+            this.table.tips = "加载失败";
+            this.table.info = "加载失败了，重新登录试一下";
+        }
+    }
+
+    protected tipsDispose(info: ClassItem[]): void {
+        if (!this.$store.state.user) return void 0;
+        this.table.list = info ? info.sort((a, b) => a.serial - b.serial) : [];
+        this.table.tips = this.table.list.length ? "" : "No Class Today";
+        this.table.info = this.table.list.length ? "" : "今天没有课，快去自习室学习吧";
+    }
+
+    protected refresh(): void {
+        storage.set("table", { term: this.$store.state.curTerm, classes: [] });
+        this.getRemoteTable(2);
+    }
+
+    protected articleJump(url: string): void {
+        // #ifdef MP-WEIXIN
+        this.nav(url, "webview");
+        // #endif
+        // #ifndef MP-WEIXIN
+        this.copy(url);
+        // #endif
+    }
+
+    protected bindSW(): void {
+        !this.$store.state.user && this.nav("/pages/home/login/login");
+    }
+}
 </script>
 
 <style scoped>

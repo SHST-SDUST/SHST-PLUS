@@ -63,60 +63,59 @@
                     <view>关于</view>
                     <view class="iconfont icon-arrow-right"></view>
                 </view>
-                <view
-                    class="a-btn a-btn-orange a-btn-large btn-full"
-                    @click="nav('/pages/home/login/login?status=1')"
-                >
-                    注销
-                </view>
+                <view class="a-btn a-btn-orange a-btn-large btn-full" @click="logout">注销</view>
             </view>
         </layout>
     </view>
 </template>
 
-<script>
-import util from "@/modules/datetime";
+<script lang="ts">
+import { formatDate } from "@/modules/datetime";
 import storage from "@/modules/storage";
-export default {
-    data: () => ({
-        user: {
-            academy: "游客",
-            name: "游客",
-            account: "游客",
-        },
-        point: "none",
-        today: util.formatDate(),
-    }),
-    created: function () {
+import { fetchUserInfo } from "@/models/user-info";
+import { Component, Vue } from "vue-property-decorator";
+@Component
+export default class User extends Vue {
+    protected user = {
+        academy: "游客",
+        name: "游客",
+        account: "游客",
+    };
+    protected point = "none";
+    protected today = formatDate();
+    protected created(): void {
         uni.$app.onload(async () => {
             storage.getPromise("point").then(data => {
                 if (data !== this.$store.state.point) this.point = "block";
             });
             if (this.$store.state.user === 0) return void 0;
-            const user = await storage.getPromise("user-info");
+            const user = await storage.getPromise<{
+                account: string;
+                name: string;
+                academy: string;
+            }>("user-info");
             if (user && user.account) {
                 console.log("GET USERINFO FROM CACHE");
                 this.user = user;
             } else {
                 console.log("GET USERINFO FROM REMOTE");
-                const res = await uni.$app.request({
-                    load: 1,
-                    throttle: true,
-                    url: this.$store.state.url + "/sw/userInfo",
-                });
+                const res = await fetchUserInfo();
                 storage.setPromise("user-info", res.data.info);
                 this.user = res.data.info;
             }
         });
-    },
-    methods: {
-        jumpUpdate: function (url) {
-            this.point = "none";
-            if (uni.hideTabBarRedDot) uni.hideTabBarRedDot({ index: 2 });
-            this.nav(url);
-        },
-    },
-};
+    }
+    protected jumpUpdate(url: string): void {
+        this.point = "none";
+        if (uni.hideTabBarRedDot) uni.hideTabBarRedDot({ index: 2 });
+        this.nav(url);
+    }
+    protected logout(): void {
+        storage.removePromise("tables");
+        storage.removePromise("user-info");
+        this.nav("/pages/home/login/login?status=1");
+    }
+}
 </script>
 
 <style scoped>

@@ -7,6 +7,10 @@ import { DefinedTableItem } from "@/components/shst-campus/types/time-table";
 /**
  * 统一处理课表功能
  */
+export type TableCache = {
+    term: string;
+    classes: RemoteTableInfo;
+};
 export type RemoteTableInfo = Array<{
     day: number;
     serial: number;
@@ -73,10 +77,11 @@ export function tableDispose(
 export const fetchTimeTable = (
     url: string,
     week: number | string,
-    term: string
-): PromiseResponse<{ info: RemoteTableInfo; week: number }> => {
+    term: string,
+    load = 2
+): PromiseResponse<{ info: RemoteTableInfo; week: number; status: number }> => {
     return uni.$app.request({
-        load: 2,
+        load,
         url,
         data: { week, term },
     });

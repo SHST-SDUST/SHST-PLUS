@@ -8,7 +8,7 @@ const throttle = operateLimit.throttleFactory();
 const debounce = operateLimit.debounceFactory();
 
 const headers = {
-    "cookie": "PHPSESSID=tgt2v1fqnbd8ii5d2outegpk16;",
+    "cookie": "",
     "content-type": "application/x-www-form-urlencoded",
 };
 
@@ -79,14 +79,14 @@ export const ajax = (requestInfo: RequestInfo): void => {
                             option.completeLoad = () => toast(popupMsg);
                             return void 0;
                         }
-                    }
-                    try {
-                        option.success(res);
-                    } catch (e) {
-                        const ERROR_MSG = "Execute Fail";
-                        option.fail({ ...res, errMsg: ERROR_MSG });
-                        option.completeLoad = () => toast(ERROR_MSG);
-                        console.log(e);
+                        try {
+                            option.success(res);
+                        } catch (e) {
+                            const ERROR_MSG = "Execute Fail";
+                            option.fail({ ...res, errMsg: ERROR_MSG });
+                            option.completeLoad = () => toast(ERROR_MSG);
+                            console.log(e);
+                        }
                     }
                 } else {
                     option.fail({ ...res, errMsg: "Response No Status" });

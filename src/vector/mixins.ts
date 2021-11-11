@@ -2,7 +2,10 @@ import Vue from "vue";
 declare module "vue/types/vue" {
     interface Vue {
         copy: (str: string) => void;
-        nav: (url: string, type?: string) => void;
+        nav: (
+            url: string,
+            type?: "nav" | "tab" | "relunch" | "back" | "webview" | "redirect"
+        ) => void;
         viewImage: (url: string, list: Array<string>) => void;
     }
 }
@@ -13,10 +16,7 @@ export const methods = {
     copy: (str: string): void => {
         if (str) uni.setClipboardData({ data: str });
     },
-    nav: (
-        url: string,
-        type: "nav" | "tab" | "relunch" | "back" | "webview" | "redirect" = "nav"
-    ): void => {
+    nav: (url: string, type = "nav"): void => {
         const fail = (e: Error) => console.log(e);
         const webviewPath = "/pages/system/webview?url=";
         switch (type) {
