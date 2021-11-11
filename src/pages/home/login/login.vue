@@ -142,7 +142,7 @@ export default class Login extends Vue {
         if (choice) {
             this.$store.commit("clearOpenid");
             uni.$app.reInitApp();
-            this.nav("/pages/home/tips/tips", "tab");
+            this.nav("/pages/home/login/login", "tab");
         }
     }
     getVerifyCode(): void {
