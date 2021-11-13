@@ -38,7 +38,13 @@
                         name="code"
                         placeholder="验证码"
                     />
+                    <view v-if="info.codeImgBase64 === 'refresh'">
+                        <view class="verify-code x-center y-center">
+                            <view>点击刷新</view>
+                        </view>
+                    </view>
                     <image
+                        v-else
                         :src="'data:image/jpg;base64,' + info.codeImgBase64"
                         class="verify-code"
                         @click="getVerifyCode"
@@ -142,7 +148,7 @@ export default class Login extends Vue {
         if (choice) {
             this.$store.commit("clearOpenid");
             uni.$app.reInitApp();
-            this.nav("/pages/home/login/login", "tab");
+            this.nav("/pages/home/login/login", "relunch");
         }
     }
     getVerifyCode(): void {
@@ -207,5 +213,6 @@ switch {
 .verify-code {
     height: 22px;
     width: 62px;
+    border: 1px solid #eee;
 }
 </style>

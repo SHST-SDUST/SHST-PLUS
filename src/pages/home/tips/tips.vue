@@ -66,7 +66,7 @@
                             第{{ 2 * item.serial - 1 }}{{ 2 * item.serial }}节
                         </view>
                         <view>{{ item.teacher }}</view>
-                        <view>{{ item.ext }}</view>
+                        <view class="a-ml">{{ item.ext }}</view>
                     </view>
                     <view class="y-center a-lmt a-mb">
                         <view class="a-ml a-lmr">{{ item.className }}</view>
