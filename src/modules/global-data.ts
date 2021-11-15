@@ -57,7 +57,7 @@ export const data: Data = {
     curWeek: 1,
     userFlag: 0, // 0 未登录 1 已登陆
     initData: {},
-    version: "3.5.7",
+    version: "1.0.1",
     project: "山科小站",
     curTerm: "2019-2020-1",
     curTermStart: "2019-08-26",
@@ -68,7 +68,7 @@ console.log("Version:", data.version);
 
 if (process.env.NODE_ENV === "development") {
     console.log("Environment:", "development");
-    data.url = "https://shstplus.touchczy.top";
+    data.url = "http://dev.shstplus.touchczy.top";
 } else {
     console.log("Environment:", "production");
     data.url = "https://shstplus.touchczy.top";

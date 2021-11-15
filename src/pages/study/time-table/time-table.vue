@@ -63,7 +63,7 @@ export default class TimeTable extends Vue {
         console.log("GET TABLE FROM REMOTE WEEK " + week);
         const tables = tableDispose(res.data.info, false, this.week);
         this.tables = tables;
-        this.week = res.data.week;
+        this.week = Number(res.data.week);
         storage.setPromise("tables", {
             term: this.$store.state.curTerm,
             classes: res.data.info,

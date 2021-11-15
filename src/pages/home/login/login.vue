@@ -39,8 +39,8 @@
                         placeholder="验证码"
                     />
                     <view v-if="info.codeImgBase64 === 'refresh'">
-                        <view class="verify-code x-center y-center">
-                            <view>点击刷新</view>
+                        <view class="verify-code x-center y-center" @click="getVerifyCode">
+                            <view class="a-color-grey a-fontsize-11">点击刷新</view>
                         </view>
                     </view>
                     <image
