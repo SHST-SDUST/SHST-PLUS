@@ -119,9 +119,6 @@ function initAppData(this: GlobalVueComponent) {
             $app.data.point = notify;
             const point = storage.get("point");
             // #ifdef MP-WEIXIN
-            if (point !== notify) uni.showTabBarRedDot({ index: 2 });
-            // #endif
-            // #ifdef MP-QQ
             if (point !== notify) uni.showTabBarRedDot({ index: 3 });
             // #endif
 
