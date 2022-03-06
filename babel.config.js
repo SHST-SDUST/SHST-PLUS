@@ -35,19 +35,17 @@ if (
     }
 }
 
-process.UNI_LIBRARIES = process.UNI_LIBRARIES || ["@dcloudio/uni-ui"];
-process.UNI_LIBRARIES.forEach(libraryName => {
-    plugins.push([
-        "import",
-        {
-            libraryName: libraryName,
-            customName: name => {
-                return `${libraryName}/lib/${name}/${name}`;
-            },
-        },
-        libraryName,
-    ]);
-});
+process.UNI_LIBRARIES = ["shst-campus"];
+plugins.push([
+    require("uniapp-import-loader/dist/babel-plugin-dynamic-import"),
+    {
+        libraryName: "shst-campus",
+        libraryPath: "lib",
+    },
+    // import { CCard } from "shst-campus";
+    // => import CCard from "shst-campus/lib/c-card/c-card";
+]);
+
 module.exports = {
     presets: [
         [

@@ -10,16 +10,16 @@ module.exports = {
         },
         module: {
             rules: [
-                {
-                    test: /\.vue$/,
-                    loader: "uniapp-import-loader",
-                    // import { CCard } from "shst-campus";
-                    // => import CCard from "shst-campus/lib/c-card/c-card";
-                    options: {
-                        name: "shst-campus",
-                        path: "lib",
-                    },
-                },
+                // {
+                //     test: /\.vue$/,
+                //     loader: "uniapp-import-loader",
+                //     // import { CCard } from "shst-campus";
+                //     // => import CCard from "shst-campus/lib/c-card/c-card";
+                //     options: {
+                //         name: "shst-campus",
+                //         path: "lib",
+                //     },
+                // },
             ],
         },
     },

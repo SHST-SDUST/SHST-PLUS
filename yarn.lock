@@ -10136,7 +10136,7 @@ shellwords@^0.1.1:
 
 shst-campus@1.1.1:
   version "1.1.1"
-  resolved "https://mirrors.tencent.com/npm/shst-campus/-/shst-campus-1.1.1.tgz#a346acc3448729a24e8f100f93e2ba019f107316"
+  resolved "https://registry.npmmirror.com/shst-campus/-/shst-campus-1.1.1.tgz#a346acc3448729a24e8f100f93e2ba019f107316"
   integrity sha512-2F3JPe5TbMBdGFQm5wxNaE4jE+wZ2mzWWgouOvXlXvIGevsLJ/uDFKOT8Mbkqpjsb0++eOtAT+lEAQb1Ee7+Hg==
   dependencies:
     vue "^2.6.11"
@@ -11113,10 +11113,10 @@ unbox-primitive@^1.0.1:
     has-symbols "^1.0.2"
     which-boxed-primitive "^1.0.2"
 
-uniapp-import-loader@1.0.1:
-  version "1.0.1"
-  resolved "https://mirrors.tencent.com/npm/uniapp-import-loader/-/uniapp-import-loader-1.0.1.tgz#f6c60d7f63f77669bcead3406f14115d3bab8ef1"
-  integrity sha512-UbXMlvPfgm1x+aoJqqf8k8Rztm5Z/Eaq9VppXF6GX/odkJKgcqwuyEp13UnyEyuC150iuaMOU0OJAzlEai1Bnw==
+uniapp-import-loader@1.1.1:
+  version "1.1.1"
+  resolved "https://registry.npmmirror.com/uniapp-import-loader/-/uniapp-import-loader-1.1.1.tgz#ed1331e8da8d5380d11bacf35c9628d3fef152cc"
+  integrity sha512-fiQvg9J/Y/jK6bRHvPpwRzAUd1hzWwVZacE5JnjAXQ7xCrf27Nb9S5Wggz4d6G/U3AEL8Ae6gUAl04Quknmz7Q==
 
 unicode-canonical-property-names-ecmascript@^1.0.4:
   version "1.0.4"
