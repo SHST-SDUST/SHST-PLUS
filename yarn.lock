@@ -11113,10 +11113,10 @@ unbox-primitive@^1.0.1:
     has-symbols "^1.0.2"
     which-boxed-primitive "^1.0.2"
 
-uniapp-import-loader@1.1.1:
-  version "1.1.1"
-  resolved "https://registry.npmmirror.com/uniapp-import-loader/-/uniapp-import-loader-1.1.1.tgz#ed1331e8da8d5380d11bacf35c9628d3fef152cc"
-  integrity sha512-fiQvg9J/Y/jK6bRHvPpwRzAUd1hzWwVZacE5JnjAXQ7xCrf27Nb9S5Wggz4d6G/U3AEL8Ae6gUAl04Quknmz7Q==
+uniapp-import-loader@1.1.3:
+  version "1.1.3"
+  resolved "https://registry.npmmirror.com/uniapp-import-loader/-/uniapp-import-loader-1.1.3.tgz#0b98d76512d2f6cb79de734fb715911d401dc368"
+  integrity sha512-A3tq8jjtgITmbLtDcQjaDTcxQ7IzBPfWhE6qEvXBUJ21l4a8y5Ya/GIN22fe3Zw0ovYh47e7CMYyWixKBMDX8Q==
 
 unicode-canonical-property-names-ecmascript@^1.0.4:
   version "1.0.4"
