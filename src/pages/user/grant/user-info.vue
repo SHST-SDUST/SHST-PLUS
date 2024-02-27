@@ -26,7 +26,7 @@ import GrantButton from "@/components/grant-button/grant-button.vue";
     components: { GrantButton },
 })
 export default class UserInfo extends Vue {
-    protected submit(userInfo: { nickName: string; avatarUrl: string }): void {
+    public submit(userInfo: { nickName: string; avatarUrl: string }): void {
         const data = {
             nick_name: userInfo.nickName,
             avatar_url: userInfo.avatarUrl,

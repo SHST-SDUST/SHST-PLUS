@@ -93,18 +93,18 @@ import { getVerifyCode, login } from "@/models/login";
 
 @Component
 export default class Login extends Vue {
-    protected account = {
+    public account = {
         name: "",
         password: "",
         code: "",
     };
-    protected info = {
+    public info = {
         codeImgBase64: "",
         status: "",
         resetApp: false,
         hidePassword: true,
     };
-    protected created(): void {
+    public created(): void {
         uni.$app.onload(() => {
             storage.getPromise<{ account: string; password: string }>("user").then(res => {
                 if (res && res.account && res.password) {
@@ -159,9 +159,9 @@ export default class Login extends Vue {
         });
     }
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    protected onShareAppMessage(): void {}
+    public onShareAppMessage(): void {}
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    protected onShareTimeline(): void {}
+    public onShareTimeline(): void {}
 }
 </script>
 

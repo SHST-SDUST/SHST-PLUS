@@ -27,11 +27,11 @@ import { DefinedTableItem } from "@/components/shst-campus/types/time-table";
     components: { CTimeTableHeader, CTimeTableBody, CCard },
 })
 export default class TimeTable extends Vue {
-    protected ad = 0;
-    protected tables: DefinedTableItem[] = [];
-    protected week = uni.$app.data.curWeek;
-    protected start = uni.$app.data.curTermStart;
-    protected created(): void {
+    public ad = 0;
+    public tables: DefinedTableItem[] = [];
+    public week = uni.$app.data.curWeek;
+    public start = uni.$app.data.curTermStart;
+    public created(): void {
         uni.$app.onload(() => {
             this.week = uni.$app.data.curWeek;
             this.start = uni.$app.data.curTermStart;
